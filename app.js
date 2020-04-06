@@ -13,36 +13,45 @@ function initial_data(){
         var initial_stock = nasdaq_100[0];
         console.log(initial_stock);
         console.log(nasdaq_100[0]);
-        //stockdetails(initial_stock);
+        stockdetails(initial_stock);
         });
     };
 
-// function stockdetails(stock){
-//     var return_patient_metadata=[];
-//     //var output;
-//     console.log(stock)
+function stockdetails(stock){
+    //var return_stock=[];
+    //var output;
+    console.log(stock)
 
-//     d3.json("Nasdaq-100.json").then((incomingData)=>{
-//         var metadata = incomingData.Name;
-//         var output = Object.keys(metadata).map(function(key) {
-//           return {type: key, name: metadata[key]};
-//        });
-//         console.log(output)
-//         return_stock = output.filter(sampleObj => sampleObj.Name == stock);
-//         //output = return_stock[0];
-//         console.log(return_stock);
-//         var details = d3.select("#sample-metadata");
+    d3.json("SIRI.json").then((incomingData)=>{
+        var closing = incomingData.c;
+        var timestamp = incomingData.t;
 
-//         details.html(" ");
+        console.log(closing)
+        console.log(timestamp)
 
-//         for (let [key, value] of (output)) {
-//         //    console.log(key, value);
-//         details
-//             .append("h5")
-//             .text(`${key}: ${value}`);
-//         };
-//     });
-// };
+        var yticks = closing;
+        var xticks = timestamp;
+        var historicalData = [
+          {
+            y: yticks,
+            x: xticks,
+            type: "line",
+            orientation: "h",
+          }
+        ];
+    
+        var historicalLayout = {
+          title: "Historical Trend - SIRI",
+          margin: { t: 30, l: 150 },
+          xaxis: {
+            type: "date",
+            tickformat: '%e %b' // For more time formatting types, see: https://github.com/d3/d3-time-format/blob/master/README.md
+          }
+        };
+    
+        Plotly.newPlot("historical", historicalData, historicalLayout)
+    });
+};
 
 
 

@@ -25,12 +25,17 @@ function stockdetails(stock){
     d3.json("SIRI.json").then((incomingData)=>{
         var closing = incomingData.c;
         var timestamp = incomingData.t;
-
+        var temp =[];
         console.log(closing)
         console.log(timestamp)
-
+        // timestamp.forEach(element => {
+        //   temp.append(element);
+        // });
+        console.log(temp);
         var yticks = closing;
         var xticks = timestamp;
+        console.log(timestamp[0]);
+        
         var historicalData = [
           {
             y: yticks,
@@ -45,7 +50,7 @@ function stockdetails(stock){
           margin: { t: 30, l: 150 },
           xaxis: {
             type: "date",
-            tickformat: '%e %b' // For more time formatting types, see: https://github.com/d3/d3-time-format/blob/master/README.md
+            tickformat: '%b %y' // For more time formatting types, see: https://github.com/d3/d3-time-format/blob/master/README.md
           }
         };
     

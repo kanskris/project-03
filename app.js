@@ -2,28 +2,29 @@
 function initial_data(){
     var dropdown_ids = d3.select("#selDataset");
     d3.json("Nasdaq-100.json").then((incomingData) => {
-        console.log(incomingData)
+        //console.log(incomingData)
         var nasdaq_100 = incomingData.Symbol;       
-        console.log(nasdaq_100);
+        //console.log(nasdaq_100);
         Object.entries(nasdaq_100).forEach(([key,value]) => {
             //console.log(element);
             dropdown_ids.append("option").text(value).property("value",value);
-
         });
         var initial_stock = nasdaq_100[0];
         console.log(initial_stock);
-        console.log(nasdaq_100[0]);
+        //console.log(nasdaq_100[0]);
         stockhistoricaltrend(initial_stock);
         stockpredictions(initial_stock);
+        stockdetails(initial_stock);
         });
     };
+function stockdetails(stock){
+    console.log(stock);
 
+};
 function stockpredictions(stock){
-    //var return_stock=[];
-    //var output;
     console.log(stock)
 
-    d3.json("APD(SIRI).json").then((incomingData)=>{
+    d3.json("APD/"+stock+".json").then((incomingData)=>{
         var closing_act = incomingData.Actual;
         var closing_prd = incomingData.Predictions;
         var timestamp = incomingData.Date;
@@ -33,12 +34,13 @@ function stockpredictions(stock){
         //console.log(closing_prd);
         Object.entries(closing_prd).forEach(([key,[value]]) => {
           //y1ticks.push(parseInt(value.toFixed(2)));
-          y1ticks.push(value);
+            y1ticks.push(value);
         });        
         //console.log(closing_act);
         Object.entries(closing_act).forEach(([key,value]) => {
-
-          yticks.push(value);
+          if (value!=0){
+            yticks.push(value);
+          };
         });
         //console.log(timestamp);
         Object.entries(timestamp).forEach(([key,value]) => {
@@ -49,12 +51,12 @@ function stockpredictions(stock){
             temp.push(day);
         });
         //console.log(temp);
-        console.log(yticks);
-        console.log(y1ticks);
+        //console.log(yticks);
+        //console.log(y1ticks);
         var xticks = temp;
         //console.log(temp[0]);
         var y_max = Math.max.apply(Math,yticks);
-        console.log(y_max);
+        //console.log(y_max);
         var trace1 = {
             x: xticks,
             y: yticks,
@@ -90,11 +92,9 @@ function stockpredictions(stock){
 
 
 function stockhistoricaltrend(stock){
-    //var return_stock=[];
-    //var output;
     console.log(stock)
 
-    d3.json("SIRI.json").then((incomingData)=>{
+    d3.json("raw_json/"+stock+".json").then((incomingData)=>{
         var closing = incomingData.c;
         var timestamp = incomingData.t;
         var temp =[];
@@ -137,7 +137,10 @@ function stockhistoricaltrend(stock){
     });
 };
 
-
+function optionChanged(stock){
+  stockpredictions(stock);
+  stockhistoricaltrend(stock);
+}
 
 //making sure the initial function for drop down loads automatically
 initial_data();
